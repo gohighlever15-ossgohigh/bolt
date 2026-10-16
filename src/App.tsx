@@ -67,19 +67,26 @@ function ReleaseCard({ release }: { release: Release }) {
 function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const swipeStartX = useRef<number | null>(null);
+  const ignoreTap = useRef(false);
   const heroArtists = artists;
   const featuredArtist = heroArtists[activeIndex];
   const moveHero = (direction: number): void => setActiveIndex((current) => (current + direction + heroArtists.length) % heroArtists.length);
-  const handleHeroPointerDown = (event: PointerEvent<HTMLElement>): void => { swipeStartX.current = event.clientX; };
+  const handleHeroPointerDown = (event: PointerEvent<HTMLElement>): void => { swipeStartX.current = event.clientX; ignoreTap.current = false; };
   const handleHeroPointerUp = (event: PointerEvent<HTMLElement>): void => {
     if (swipeStartX.current === null) return;
     const distance = event.clientX - swipeStartX.current;
     swipeStartX.current = null;
-    if (Math.abs(distance) >= 48) moveHero(distance < 0 ? 1 : -1);
+    if (Math.abs(distance) >= 48) { ignoreTap.current = true; moveHero(distance < 0 ? 1 : -1); }
+  };
+  const handleHeroClick = (event: MouseEvent<HTMLElement>): void => {
+    if (!window.matchMedia('(max-width: 820px)').matches) return;
+    if (ignoreTap.current) { ignoreTap.current = false; return; }
+    if ((event.target as HTMLElement).closest('button, a')) return;
+    moveHero(event.clientX < event.currentTarget.clientWidth / 2 ? -1 : 1);
   };
   const scrollToReleases = (): void => document.getElementById('latest-releases')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   return <>
-    <section className="hero" onPointerDown={handleHeroPointerDown} onPointerUp={handleHeroPointerUp} onPointerCancel={() => { swipeStartX.current = null; }}>
+    <section className="hero" onPointerDown={handleHeroPointerDown} onPointerUp={handleHeroPointerUp} onPointerCancel={() => { swipeStartX.current = null; }} onClick={handleHeroClick}>
       {heroArtists.map((artist, index) => <div className={`hero-slide ${index === activeIndex ? 'current' : ''}`} key={artist.id}><img src={artist.image} alt={`${artist.name} portrait`} /><div className="hero-shade" /></div>)}
       <button className="hero-nav hero-prev" aria-label="Previous featured artist" onClick={() => moveHero(-1)}><ArrowLeft size={20} /></button>
       <button className="hero-nav hero-next" aria-label="Next featured artist" onClick={() => moveHero(1)}><ArrowRight size={20} /></button>
