@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
 import { ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, Bot, Disc3, Facebook, Instagram, Menu, MessageCircle, Music2, Play, Send, X, Youtube } from 'lucide-react';
-import { applicationUrl, artists, releases, type Artist, type Release } from '@/data';
+import { applicationUrl, artists, releases, spotifyTracks, type Artist, type Release, type SpotifyTrack } from '@/data';
 
 const navItems = [
   ['Home', '/'], ['Artists', '/artists'], ['Releases', '/releases'], ['Listen', '/listen'], ['Merch', '/merch'], ['Apply', '/apply'], ['About', '/about'],
@@ -116,13 +116,34 @@ function ArtistSection({ artist, reverse }: { artist: Artist; reverse: boolean }
 function ReleasesPage() {
   const out = releases.filter((release) => release.status === 'out');
   const soon = releases.filter((release) => release.status === 'soon');
-  return <><PageIntro eyebrow="Music · 2026" title="Releases"><p>Recent work from the roster, and what is next.</p></PageIntro><section className="section-pad"><div className="section-label"><h2>Out now</h2><span>{String(out.length).padStart(2, '0')} releases</span></div><div className="release-grid">{out.map((release) => <ReleaseCard release={release} key={release.title} />)}</div></section><section className="section-pad" style={{ paddingTop: 0 }}><div className="section-label"><h2>Coming soon</h2><span>Pre-save the next chapter</span></div><div className="release-grid">{soon.map((release) => <div key={release.title}><ReleaseCard release={release} /><div style={{ marginTop: 18 }}><LinkButton href="#" silver>Pre-save</LinkButton></div></div>)}</div></section></>;
+  const featuredArtists = ['TADYN', 'THE KID JETT', 'youngscide'];
+  return <><PageIntro eyebrow="Music · 2026" title="Releases"><p>Real music from the roster. Stream the latest singles and most popular tracks right here.</p></PageIntro>
+    <section className="section-pad"><div className="section-label"><h2>Out now</h2><span>{String(out.length).padStart(2, '0')} releases</span></div><div className="release-grid">{out.map((release) => <ReleaseCard release={release} key={release.title} />)}</div></section>
+    {soon.length > 0 && <section className="section-pad" style={{ paddingTop: 0 }}><div className="section-label"><h2>Coming soon</h2><span>Pre-save the next chapter</span></div><div className="release-grid">{soon.map((release) => <div key={release.title}><ReleaseCard release={release} /><div style={{ marginTop: 18 }}><LinkButton href="#" silver>Pre-save</LinkButton></div></div>)}</div></section>}
+    <section className="section-pad" style={{ paddingTop: 0 }}><div className="section-label"><h2>Stream now</h2><span>Play the full tracks</span></div><div className="embed-grid">{featuredArtists.map((artistName) => { const artist = artists.find((a) => a.name === artistName); const track = spotifyTracks.find((t) => t.artist === artistName); if (!track || !artist) return null; return <div className="embed-box" key={artistName}><div className="embed-box-head"><div className="eyebrow">{artistName}</div><h3>{track.title}</h3></div><iframe title={`${track.title} by ${artistName}`} src={track.embed} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" /><a className="cta silver" href={artist.spotify} target="_blank" rel="noreferrer">Open on Spotify <ArrowRight size={15} /></a></div>; })}</div></section>
+  </>;
 }
 
 const videoThumbs = ['https://images.pexels.com/photos/12092991/pexels-photo-12092991.jpeg?auto=compress&cs=tinysrgb&w=1000', 'https://images.pexels.com/photos/22857353/pexels-photo-22857353.jpeg?auto=compress&cs=tinysrgb&w=1000', 'https://images.pexels.com/photos/34406254/pexels-photo-34406254.jpeg?auto=compress&cs=tinysrgb&w=1000'];
 function ListenPage() {
   const [video, setVideo] = useState<string | null>(null);
-  return <><PageIntro eyebrow="The sound · On repeat" title="Listen"><p>Stay close to the music. Streaming, visuals, and everything in between.</p></PageIntro><section className="section-pad"><div className="section-label"><h2>Streaming</h2><span>Roster playlist</span></div><div className="embed-grid"><div className="embed-box"><img className="embed-art" src="https://images.pexels.com/photos/18197120/pexels-photo-18197120.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Music studio equipment" /><div><h3>Winter Music Group</h3><p>Spotify playlist · all artists</p></div><a className="cta" href="#">Open playlist <ArrowRight size={15} /></a></div><div className="embed-box"><img className="embed-art" src="https://images.pexels.com/photos/5764281/pexels-photo-5764281.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Vinyl record on a turntable" /><div><h3>Winter Music Group</h3><p>Apple Music playlist · all artists</p></div><a className="cta" href="#">Open playlist <ArrowRight size={15} /></a></div></div></section><section className="section-pad" style={{ paddingTop: 0 }}><div className="section-label"><h2>Videos</h2><span>Watch the latest</span></div><div className="video-grid">{videoThumbs.map((thumb, index) => <article className="video-card" key={thumb} onClick={() => setVideo(`https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1`)}><div className="video-thumb"><img src={thumb} alt={`Winter Music Group video ${index + 1}`} /><span className="play"><Play size={16} fill="currentColor" /></span></div><h3>{['TADYN — Cold Front', 'In the room · Winter Music Group', 'The roster · 2026'][index]}</h3></article>)}</div></section>{video && <div className="modal" role="dialog" aria-modal="true"><div className="modal-inner"><button className="modal-close" onClick={() => setVideo(null)} aria-label="Close video"><X /></button><iframe src={video} title="Winter Music Group video" allow="autoplay; fullscreen" /></div></div>}</>;
+  const featuredArtists = ['TADYN', 'THE KID JETT', '-+ApolloX+-', 'youngscide'];
+  const artistTracks: Record<string, SpotifyTrack[]> = {};
+  featuredArtists.forEach((name) => { artistTracks[name] = spotifyTracks.filter((t) => t.artist === name); });
+  return <><PageIntro eyebrow="The sound · On repeat" title="Listen"><p>Stream the real music from the roster. Full tracks, right here on the page.</p></PageIntro>
+    <section className="section-pad"><div className="section-label"><h2>Featured tracks</h2><span>Play now</span></div><div className="listen-artist-grid">{featuredArtists.map((name) => {
+      const artist = artists.find((a) => a.name === name);
+      const tracks = artistTracks[name];
+      if (!artist) return null;
+      return <div className="listen-artist-block" key={name}>
+        <div className="listen-artist-head"><div className="listen-artist-photo"><img src={artist.image} alt={`${name} portrait`} /></div><div><div className="eyebrow">{name}</div><a className="cta silver" href={artist.spotify} target="_blank" rel="noreferrer">Open profile <ArrowRight size={14} /></a></div></div>
+        {tracks.length > 0 ? <div className="listen-embed-stack">{tracks.map((track) => <iframe key={track.trackId} title={`${track.title} by ${name}`} src={track.embed} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />)}</div>
+        : <div className="listen-embed-placeholder"><iframe title={`${name} Spotify artist embed`} src={`https://open.spotify.com/embed/artist/${artist.spotify.split('/').pop()}`} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" /></div>}
+      </div>;
+    })}</div></section>
+    <section className="section-pad" style={{ paddingTop: 0 }}><div className="section-label"><h2>Videos</h2><span>Watch the latest</span></div><div className="video-grid">{videoThumbs.map((thumb, index) => <article className="video-card" key={thumb} onClick={() => setVideo(`https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1`)}><div className="video-thumb"><img src={thumb} alt={`Winter Music Group video ${index + 1}`} /><span className="play"><Play size={16} fill="currentColor" /></span></div><h3>{['TADYN — Run Away', 'In the room · Winter Music Group', 'The roster · 2026'][index]}</h3></article>)}</div></section>
+    {video && <div className="modal" role="dialog" aria-modal="true"><div className="modal-inner"><button className="modal-close" onClick={() => setVideo(null)} aria-label="Close video"><X /></button><iframe src={video} title="Winter Music Group video" allow="autoplay; fullscreen" /></div></div>}
+  </>;
 }
 
 function MerchPage() {

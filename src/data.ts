@@ -15,6 +15,25 @@ export type Release = {
   status: 'out' | 'soon';
 };
 
+export type SpotifyTrack = {
+  title: string;
+  artist: string;
+  trackId: string;
+  embed: string;
+};
+
+export const spotifyTracks: SpotifyTrack[] = [
+  { title: 'Run Away', artist: 'TADYN', trackId: '6eq3waAY5WeYK8y7hVeOQz', embed: 'https://open.spotify.com/embed/track/6eq3waAY5WeYK8y7hVeOQz' },
+  { title: 'Here With Me', artist: 'TADYN', trackId: '6r5sslX56FO5vmS1QUbIww', embed: 'https://open.spotify.com/embed/track/6r5sslX56FO5vmS1QUbIww' },
+  { title: 'Paper Planes', artist: 'TADYN', trackId: '6jrtCFlVyZLazpwleXje2k', embed: 'https://open.spotify.com/embed/track/6jrtCFlVyZLazpwleXje2k' },
+  { title: 'Pay Me', artist: 'TADYN', trackId: '4S2Em8hFq6VAI6jIEF7mn0', embed: 'https://open.spotify.com/embed/track/4S2Em8hFq6VAI6jIEF7mn0' },
+  { title: 'Same Night Different Dream (Alternate Mix)', artist: 'THE KID JETT', trackId: '0PYym5yJodAIK4EXdXyqiC', embed: 'https://open.spotify.com/embed/track/0PYym5yJodAIK4EXdXyqiC' },
+  { title: 'Again', artist: 'THE KID JETT', trackId: '75ulfzoT660uBxDVlzja3J', embed: 'https://open.spotify.com/embed/track/75ulfzoT660uBxDVlzja3J' },
+  { title: 'Brother (Bonus Track)', artist: 'THE KID JETT', trackId: '1FmGxzRnZhvTRw1Uvns1NZ', embed: 'https://open.spotify.com/embed/track/1FmGxzRnZhvTRw1Uvns1NZ' },
+  { title: 'THE BRIDGE', artist: 'THE KID JETT', trackId: '2To5k4OsGvHab2lzrR28iG', embed: 'https://open.spotify.com/embed/track/2To5k4OsGvHab2lzrR28iG' },
+  { title: 'Know I Know', artist: 'youngscide', trackId: '42Nrp87CUUhf7fxOZIx7BY', embed: 'https://open.spotify.com/embed/track/42Nrp87CUUhf7fxOZIx7BY' },
+];
+
 const portraits = [
   '/images/artists/780840719_18099785579014023_6782924280227178316_n.jpg',
   '/images/artists/IMG_2715.JPG',
@@ -65,11 +84,12 @@ const covers = [
 ];
 
 export const releases: Release[] = [
-  { title: 'Cold Front', artist: 'TADYN', date: '08.29.26', cover: covers[0], status: 'out' },
-  { title: 'No Signal', artist: 'YHB_Kee', date: '08.15.26', cover: covers[1], status: 'out' },
-  { title: 'After Hours', artist: 'THE KID JETT', date: '07.31.26', cover: covers[2], status: 'out' },
-  { title: 'New Weather', artist: 'youngscide', date: '09.26.26', cover: covers[3], status: 'soon' },
-  { title: 'Blue Light', artist: 'GVIYEM', date: '10.10.26', cover: covers[4], status: 'soon' }
+  { title: 'Run Away', artist: 'TADYN', date: 'Single · 2026', cover: covers[0], status: 'out' },
+  { title: 'Same Night Different Dream (Alternate Mix)', artist: 'THE KID JETT', date: 'Single · 2026', cover: covers[1], status: 'out' },
+  { title: 'Know I Know', artist: 'youngscide', date: 'Single · 2026', cover: covers[2], status: 'out' },
+  { title: 'Here With Me', artist: 'TADYN', date: 'Single · 2026', cover: covers[3], status: 'out' },
+  { title: 'Again', artist: 'THE KID JETT', date: 'Single · 2026', cover: covers[4], status: 'out' },
+  { title: 'Billie Jean', artist: 'youngscide', date: 'Single · 2026', cover: covers[0], status: 'soon' },
 ];
 
 export const applicationUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdDNNQhV9i8kHDt4KBvjvS4sqi8jK1dbh_eJbQ3L01qRQY7zQ/viewform';
