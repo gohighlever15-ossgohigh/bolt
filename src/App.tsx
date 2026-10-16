@@ -7,7 +7,7 @@ const navItems = [
 ];
 
 function navigate(path: string): void {
-  const [pathname, hash] = path.split('#');
+  const [, hash] = path.split('#');
   window.history.pushState({}, '', path);
   window.dispatchEvent(new CustomEvent('navigate'));
   if (hash) {
@@ -15,7 +15,6 @@ function navigate(path: string): void {
   } else {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  if (pathname !== window.location.pathname) window.history.replaceState({}, '', path);
 }
 
 function LinkButton({ href, children, silver = false, external = false }: { href: string; children: ReactNode; silver?: boolean; external?: boolean }) {
@@ -67,9 +66,13 @@ function ReleaseCard({ release }: { release: Release }) {
 
 function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const heroArtists = artists.slice(0, 3);
+  const heroArtists = artists;
   const featuredArtist = heroArtists[activeIndex];
   const moveHero = (direction: number): void => setActiveIndex((current) => (current + direction + heroArtists.length) % heroArtists.length);
+  useEffect(() => {
+    const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % artists.length), 6500);
+    return () => window.clearInterval(timer);
+  }, []);
   const scrollToReleases = (): void => document.getElementById('latest-releases')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   return <>
     <section className="hero">
