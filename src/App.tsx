@@ -129,9 +129,8 @@ function ReleasesPage() {
   return <><PageIntro eyebrow="Music · 2026" title="Releases"><p>Real music from the roster. Stream the latest singles and most popular tracks right here.</p></PageIntro>
     {featuredArtists.map((artistName) => {
       const artist = artists.find((a) => a.name === artistName);
-      const artistReleases = releases.filter((r) => r.artist === artistName);
-      const popular = spotifyTracks.filter((t) => t.artist === artistName && t.popular);
-      const newTracks = spotifyTracks.filter((t) => t.artist === artistName && !t.popular);
+      const artistReleases = releases.filter((r) => r.artist === artistName).slice(0, 2);
+      const popular = spotifyTracks.filter((t) => t.artist === artistName && t.popular).slice(0, 1);
       if (!artist) return null;
       return <section className="section-pad release-artist-section" key={artistName}>
         <div className="release-artist-head"><div className="release-artist-photo"><img src={artist.image} alt={`${artistName} portrait`} /></div><div><div className="eyebrow">{artistName}</div><a className="cta silver" href={artist.spotify} target="_blank" rel="noreferrer">Open on Spotify <ArrowRight size={14} /></a></div></div>
@@ -139,8 +138,6 @@ function ReleasesPage() {
         {artistReleases.length > 0 && <div className="release-grid">{artistReleases.map((release) => <ReleaseCard release={release} key={release.title} />)}</div>}
         {popular.length > 0 && <div className="release-sub-label">Most popular</div>}
         {popular.length > 0 && <div className="release-grid">{popular.map((track) => <ReleaseCard release={{ title: track.title, artist: artistName, date: 'Single · 2026', cover: track.embed, status: 'out' }} key={track.trackId} />)}</div>}
-        {newTracks.length > 0 && <div className="release-sub-label">More tracks</div>}
-        {newTracks.length > 0 && <div className="release-grid">{newTracks.map((track) => <ReleaseCard release={{ title: track.title, artist: artistName, date: 'Single · 2026', cover: track.embed, status: 'out' }} key={track.trackId} />)}</div>}
       </section>;
     })}
     <section className="section-pad release-artist-section" style={{ paddingTop: 0 }}>
@@ -154,16 +151,14 @@ function ReleasesPage() {
 const videoThumbs = ['https://images.pexels.com/photos/12092991/pexels-photo-12092991.jpeg?auto=compress&cs=tinysrgb&w=1000', 'https://images.pexels.com/photos/22857353/pexels-photo-22857353.jpeg?auto=compress&cs=tinysrgb&w=1000', 'https://images.pexels.com/photos/34406254/pexels-photo-34406254.jpeg?auto=compress&cs=tinysrgb&w=1000'];
 function ListenPage() {
   const [video, setVideo] = useState<string | null>(null);
-  const featuredArtists = ['TADYN', 'THE KID JETT', 'youngscide', '-+ApolloX+-'];
   return <><PageIntro eyebrow="The sound · On repeat" title="Listen"><p>Stream the real music from the roster. Full tracks, right here on the page.</p></PageIntro>
-    <section className="section-pad"><div className="section-label"><h2>Featured tracks</h2><span>Play now</span></div><div className="listen-artist-grid">{featuredArtists.map((name) => {
-      const artist = artists.find((a) => a.name === name);
+    <section className="section-pad"><div className="section-label"><h2>Featured tracks</h2><span>Swipe to explore</span></div><div className="listen-artist-scroll">{artists.map((artist) => {
+      const name = artist.name;
       const tracks = spotifyTracks.filter((t) => t.artist === name);
-      if (!artist) return null;
       return <div className="listen-artist-block" key={name}>
         <div className="listen-artist-head"><div className="listen-artist-photo"><img src={artist.image} alt={`${name} portrait`} /></div><div><div className="eyebrow">{name}</div><a className="cta silver" href={artist.spotify} target="_blank" rel="noreferrer">Open profile <ArrowRight size={14} /></a></div></div>
         {tracks.length > 0 ? <div className="listen-embed-stack">{tracks.map((track) => <iframe key={track.trackId} title={`${track.title} by ${name}`} src={track.embed} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />)}</div>
-        : <div className="listen-embed-placeholder"><iframe title={`${name} Spotify artist embed`} src={`https://open.spotify.com/embed/artist/${artist.spotify.split('/').pop()}`} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" /></div>}
+        : <div className="listen-embed-placeholder"><iframe title={`${name} Spotify artist embed`} src={artistEmbedUrl(artist)} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" /></div>}
       </div>;
     })}</div></section>
     <section className="section-pad" style={{ paddingTop: 0 }}><div className="section-label"><h2>Videos</h2><span>Watch the latest</span></div><div className="video-grid">{videoThumbs.map((thumb, index) => <article className="video-card" key={thumb} onClick={() => setVideo(`https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1`)}><div className="video-thumb"><img src={thumb} alt={`Winter Music Group video ${index + 1}`} /><span className="play"><Play size={16} fill="currentColor" /></span></div><h3>{['TADYN — Run Away', 'In the room · Winter Music Group', 'The roster · 2026'][index]}</h3></article>)}</div></section>
