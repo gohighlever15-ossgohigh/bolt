@@ -20,18 +20,26 @@ export type SpotifyTrack = {
   artist: string;
   trackId: string;
   embed: string;
+  popular: boolean;
 };
 
 export const spotifyTracks: SpotifyTrack[] = [
-  { title: 'Run Away', artist: 'TADYN', trackId: '6eq3waAY5WeYK8y7hVeOQz', embed: 'https://open.spotify.com/embed/track/6eq3waAY5WeYK8y7hVeOQz' },
-  { title: 'Here With Me', artist: 'TADYN', trackId: '6r5sslX56FO5vmS1QUbIww', embed: 'https://open.spotify.com/embed/track/6r5sslX56FO5vmS1QUbIww' },
-  { title: 'Paper Planes', artist: 'TADYN', trackId: '6jrtCFlVyZLazpwleXje2k', embed: 'https://open.spotify.com/embed/track/6jrtCFlVyZLazpwleXje2k' },
-  { title: 'Pay Me', artist: 'TADYN', trackId: '4S2Em8hFq6VAI6jIEF7mn0', embed: 'https://open.spotify.com/embed/track/4S2Em8hFq6VAI6jIEF7mn0' },
-  { title: 'Same Night Different Dream (Alternate Mix)', artist: 'THE KID JETT', trackId: '0PYym5yJodAIK4EXdXyqiC', embed: 'https://open.spotify.com/embed/track/0PYym5yJodAIK4EXdXyqiC' },
-  { title: 'Again', artist: 'THE KID JETT', trackId: '75ulfzoT660uBxDVlzja3J', embed: 'https://open.spotify.com/embed/track/75ulfzoT660uBxDVlzja3J' },
-  { title: 'Brother (Bonus Track)', artist: 'THE KID JETT', trackId: '1FmGxzRnZhvTRw1Uvns1NZ', embed: 'https://open.spotify.com/embed/track/1FmGxzRnZhvTRw1Uvns1NZ' },
-  { title: 'THE BRIDGE', artist: 'THE KID JETT', trackId: '2To5k4OsGvHab2lzrR28iG', embed: 'https://open.spotify.com/embed/track/2To5k4OsGvHab2lzrR28iG' },
-  { title: 'Know I Know', artist: 'youngscide', trackId: '42Nrp87CUUhf7fxOZIx7BY', embed: 'https://open.spotify.com/embed/track/42Nrp87CUUhf7fxOZIx7BY' },
+  { title: 'Run Away', artist: 'TADYN', trackId: '6eq3waAY5WeYK8y7hVeOQz', embed: 'https://open.spotify.com/embed/track/6eq3waAY5WeYK8y7hVeOQz', popular: true },
+  { title: 'Here With Me', artist: 'TADYN', trackId: '6r5sslX56FO5vmS1QUbIww', embed: 'https://open.spotify.com/embed/track/6r5sslX56FO5vmS1QUbIww', popular: true },
+  { title: 'Forget Me Tomorrow', artist: 'TADYN', trackId: '70Z3LXCtJzF15Gfpd6ctEj', embed: 'https://open.spotify.com/embed/track/70Z3LXCtJzF15Gfpd6ctEj', popular: false },
+  { title: 'Wish You the Best', artist: 'TADYN', trackId: '77KbkxDxQJoGGzbT8NwJHt', embed: 'https://open.spotify.com/embed/track/77KbkxDxQJoGGzbT8NwJHt', popular: true },
+  { title: 'Love Again', artist: 'TADYN', trackId: '5Ggm0IIKWUSc6eM45Cr1gL', embed: 'https://open.spotify.com/embed/track/5Ggm0IIKWUSc6eM45Cr1gL', popular: false },
+  { title: 'Pay Me', artist: 'TADYN', trackId: '4S2Em8hFq6VAI6jIEF7mn0', embed: 'https://open.spotify.com/embed/track/4S2Em8hFq6VAI6jIEF7mn0', popular: false },
+  { title: 'Dancer in the Rain', artist: 'TADYN', trackId: '6jrtCFlVyZLazpwleXje2k', embed: 'https://open.spotify.com/embed/track/6jrtCFlVyZLazpwleXje2k', popular: false },
+  { title: 'Same Night Different Dream', artist: 'THE KID JETT', trackId: '0PYym5yJodAIK4EXdXyqiC', embed: 'https://open.spotify.com/embed/track/0PYym5yJodAIK4EXdXyqiC', popular: true },
+  { title: 'Too Late For Us', artist: 'THE KID JETT', trackId: '29b8Nf6NgwjtZE5tPlaOTl', embed: 'https://open.spotify.com/embed/track/29b8Nf6NgwjtZE5tPlaOTl', popular: true },
+  { title: 'Again', artist: 'THE KID JETT', trackId: '75ulfzoT660uBxDVlzja3J', embed: 'https://open.spotify.com/embed/track/75ulfzoT660uBxDVlzja3J', popular: false },
+  { title: 'THE BRIDGE', artist: 'THE KID JETT', trackId: '2To5k4OsGvHab2lzrR28iG', embed: 'https://open.spotify.com/embed/track/2To5k4OsGvHab2lzrR28iG', popular: false },
+  { title: 'Brother (Bonus Track)', artist: 'THE KID JETT', trackId: '1FmGxzRnZhvTRw1Uvns1NZ', embed: 'https://open.spotify.com/embed/track/1FmGxzRnZhvTRw1Uvns1NZ', popular: false },
+  { title: 'POP OUT', artist: 'youngscide', trackId: '0wpwc5iob66NiKEoWN2g85', embed: 'https://open.spotify.com/embed/track/0wpwc5iob66NiKEoWN2g85', popular: true },
+  { title: 'How We Roll', artist: 'youngscide', trackId: '4xlMBTVT5zXmEgTYR25ydM', embed: 'https://open.spotify.com/embed/track/4xlMBTVT5zXmEgTYR25ydM', popular: true },
+  { title: 'Rock Ya Body', artist: 'youngscide', trackId: '01CNCSy80U8Cc7NVY2GVNN', embed: 'https://open.spotify.com/embed/track/01CNCSy80U8Cc7NVY2GVNN', popular: true },
+  { title: 'Know I Know', artist: 'youngscide', trackId: '42Nrp87CUUhf7fxOZIx7BY', embed: 'https://open.spotify.com/embed/track/42Nrp87CUUhf7fxOZIx7BY', popular: false },
 ];
 
 const portraits = [
@@ -75,21 +83,16 @@ export const artists: Artist[] = names.map((name, index) => ({
   ],
 }));
 
-const covers = [
-  'https://images.pexels.com/photos/5764281/pexels-photo-5764281.jpeg?auto=compress&cs=tinysrgb&w=900',
-  'https://images.pexels.com/photos/18197120/pexels-photo-18197120.jpeg?auto=compress&cs=tinysrgb&w=900',
-  'https://images.pexels.com/photos/19409467/pexels-photo-19409467.jpeg?auto=compress&cs=tinysrgb&w=900',
-  'https://images.pexels.com/photos/14865644/pexels-photo-14865644.jpeg?auto=compress&cs=tinysrgb&w=900',
-  'https://images.pexels.com/photos/8168570/pexels-photo-8168570.png?auto=compress&cs=tinysrgb&w=900',
-];
 
 export const releases: Release[] = [
-  { title: 'Run Away', artist: 'TADYN', date: 'Single · 2026', cover: covers[0], status: 'out' },
-  { title: 'Same Night Different Dream (Alternate Mix)', artist: 'THE KID JETT', date: 'Single · 2026', cover: covers[1], status: 'out' },
-  { title: 'Know I Know', artist: 'youngscide', date: 'Single · 2026', cover: covers[2], status: 'out' },
-  { title: 'Here With Me', artist: 'TADYN', date: 'Single · 2026', cover: covers[3], status: 'out' },
-  { title: 'Again', artist: 'THE KID JETT', date: 'Single · 2026', cover: covers[4], status: 'out' },
-  { title: 'Billie Jean', artist: 'youngscide', date: 'Single · 2026', cover: covers[0], status: 'soon' },
+  { title: 'Run Away', artist: 'TADYN', date: 'Single · 2026', cover: 'https://open.spotify.com/embed/track/6eq3waAY5WeYK8y7hVeOQz', status: 'out' },
+  { title: 'Same Night Different Dream', artist: 'THE KID JETT', date: 'Single · 2026', cover: 'https://open.spotify.com/embed/track/0PYym5yJodAIK4EXdXyqiC', status: 'out' },
+  { title: 'POP OUT', artist: 'youngscide', date: 'Single · 2026', cover: 'https://open.spotify.com/embed/track/0wpwc5iob66NiKEoWN2g85', status: 'out' },
+  { title: 'Here With Me', artist: 'TADYN', date: 'Single · 2026', cover: 'https://open.spotify.com/embed/track/6r5sslX56FO5vmS1QUbIww', status: 'out' },
+  { title: 'Too Late For Us', artist: 'THE KID JETT', date: 'Single · 2026', cover: 'https://open.spotify.com/embed/track/29b8Nf6NgwjtZE5tPlaOTl', status: 'out' },
+  { title: 'How We Roll', artist: 'youngscide', date: 'Single · 2026', cover: 'https://open.spotify.com/embed/track/4xlMBTVT5zXmEgTYR25ydM', status: 'out' },
+  { title: 'Wish You the Best', artist: 'TADYN', date: 'Single · 2026', cover: 'https://open.spotify.com/embed/track/77KbkxDxQJoGGzbT8NwJHt', status: 'out' },
+  { title: 'Rock Ya Body', artist: 'youngscide', date: 'Single · 2026', cover: 'https://open.spotify.com/embed/track/01CNCSy80U8Cc7NVY2GVNN', status: 'out' },
 ];
 
 export const applicationUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdDNNQhV9i8kHDt4KBvjvS4sqi8jK1dbh_eJbQ3L01qRQY7zQ/viewform';

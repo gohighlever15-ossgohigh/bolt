@@ -2,6 +2,14 @@ import { useEffect, useMemo, useRef, useState, type FormEvent, type MouseEvent, 
 import { ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, Bot, Disc3, Facebook, Instagram, Menu, MessageCircle, Music2, Play, Send, X, Youtube } from 'lucide-react';
 import { applicationUrl, artists, releases, spotifyTracks, type Artist, type Release, type SpotifyTrack } from '@/data';
 
+function latestTrackForArtist(name: string): SpotifyTrack | null {
+  return spotifyTracks.find((t) => t.artist === name) ?? null;
+}
+
+function artistEmbedUrl(artist: Artist): string {
+  return `https://open.spotify.com/embed/artist/${artist.spotify.split('/').pop()}`;
+}
+
 const navItems = [
   ['Home', '/'], ['Artists', '/artists'], ['Releases', '/releases'], ['Listen', '/listen'], ['Merch', '/merch'], ['Apply', '/apply'], ['About', '/about'],
 ];
@@ -61,7 +69,7 @@ function PageIntro({ eyebrow, title, children }: { eyebrow: string; title: strin
 }
 
 function ReleaseCard({ release }: { release: Release }) {
-  return <article className="release-card"><div className="cover"><img src={release.cover} alt={`${release.title} cover artwork`} /></div><div className="release-meta"><div><strong>{release.title}</strong><small>{release.artist}</small></div><div className="text-right"><span className="status">{release.status === 'soon' ? 'Coming soon' : 'Out now'}</span><small>{release.date}</small></div></div></article>;
+  return <article className="release-card embed-release"><iframe title={`${release.title} by ${release.artist}`} src={release.cover} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" /><div className="release-meta"><div><strong>{release.title}</strong><small>{release.artist}</small></div><div className="text-right"><span className="status">{release.status === 'soon' ? 'Coming soon' : 'Out now'}</span><small>{release.date}</small></div></div></article>;
 }
 
 function Home() {
@@ -110,30 +118,47 @@ function ArtistsPage() {
 }
 
 function ArtistSection({ artist, reverse }: { artist: Artist; reverse: boolean }) {
-  return <section className={`artist-section ${reverse ? 'reverse' : ''}`} id={artist.id}><div className="artist-image"><img src={artist.image} alt={`${artist.name} portrait`} loading="lazy" /></div><div className="artist-copy"><div className="eyebrow">Artist · Winter Music Group</div><h2 className="artist-name">{artist.name}</h2><p>{artist.bio}</p><div className="artist-links"><LinkButton href={artist.spotify} external silver>Listen on Spotify</LinkButton></div><div className="artist-socials">{artist.socials.map((social) => <a href={social.href} key={social.label} aria-label={`${artist.name} ${social.label}`} title={social.label}><SocialIcon label={social.label} /></a>)}</div></div></section>;
+  const skipEmbed = artist.name === 'em34son';
+  const latest = latestTrackForArtist(artist.name);
+  const embedSrc = latest ? latest.embed : artistEmbedUrl(artist);
+  return <section className={`artist-section ${reverse ? 'reverse' : ''}`} id={artist.id}><div className="artist-image"><img src={artist.image} alt={`${artist.name} portrait`} loading="lazy" /></div><div className="artist-copy"><div className="eyebrow">Artist · Winter Music Group</div><h2 className="artist-name">{artist.name}</h2><p>{artist.bio}</p><div className="artist-links"><LinkButton href={artist.spotify} external silver>Listen on Spotify</LinkButton>{!skipEmbed && <button className="cta" onClick={() => document.getElementById(`${artist.id}-embed`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })}><Play size={15} fill="currentColor" /> Play latest</button>}</div>{!skipEmbed && <div className="artist-embed" id={`${artist.id}-embed`}><iframe title={latest ? `${latest.title} by ${artist.name}` : `${artist.name} on Spotify`} src={embedSrc} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" /></div>}<div className="artist-socials">{artist.socials.map((social) => <a href={social.href} key={social.label} aria-label={`${artist.name} ${social.label}`} title={social.label}><SocialIcon label={social.label} /></a>)}</div></div></section>;
 }
 
 function ReleasesPage() {
-  const out = releases.filter((release) => release.status === 'out');
-  const soon = releases.filter((release) => release.status === 'soon');
   const featuredArtists = ['TADYN', 'THE KID JETT', 'youngscide'];
   return <><PageIntro eyebrow="Music · 2026" title="Releases"><p>Real music from the roster. Stream the latest singles and most popular tracks right here.</p></PageIntro>
-    <section className="section-pad"><div className="section-label"><h2>Out now</h2><span>{String(out.length).padStart(2, '0')} releases</span></div><div className="release-grid">{out.map((release) => <ReleaseCard release={release} key={release.title} />)}</div></section>
-    {soon.length > 0 && <section className="section-pad" style={{ paddingTop: 0 }}><div className="section-label"><h2>Coming soon</h2><span>Pre-save the next chapter</span></div><div className="release-grid">{soon.map((release) => <div key={release.title}><ReleaseCard release={release} /><div style={{ marginTop: 18 }}><LinkButton href="#" silver>Pre-save</LinkButton></div></div>)}</div></section>}
-    <section className="section-pad" style={{ paddingTop: 0 }}><div className="section-label"><h2>Stream now</h2><span>Play the full tracks</span></div><div className="embed-grid">{featuredArtists.map((artistName) => { const artist = artists.find((a) => a.name === artistName); const track = spotifyTracks.find((t) => t.artist === artistName); if (!track || !artist) return null; return <div className="embed-box" key={artistName}><div className="embed-box-head"><div className="eyebrow">{artistName}</div><h3>{track.title}</h3></div><iframe title={`${track.title} by ${artistName}`} src={track.embed} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" /><a className="cta silver" href={artist.spotify} target="_blank" rel="noreferrer">Open on Spotify <ArrowRight size={15} /></a></div>; })}</div></section>
+    {featuredArtists.map((artistName) => {
+      const artist = artists.find((a) => a.name === artistName);
+      const artistReleases = releases.filter((r) => r.artist === artistName);
+      const popular = spotifyTracks.filter((t) => t.artist === artistName && t.popular);
+      const newTracks = spotifyTracks.filter((t) => t.artist === artistName && !t.popular);
+      if (!artist) return null;
+      return <section className="section-pad release-artist-section" key={artistName}>
+        <div className="release-artist-head"><div className="release-artist-photo"><img src={artist.image} alt={`${artistName} portrait`} /></div><div><div className="eyebrow">{artistName}</div><a className="cta silver" href={artist.spotify} target="_blank" rel="noreferrer">Open on Spotify <ArrowRight size={14} /></a></div></div>
+        {artistReleases.length > 0 && <div className="release-sub-label">Latest releases</div>}
+        {artistReleases.length > 0 && <div className="release-grid">{artistReleases.map((release) => <ReleaseCard release={release} key={release.title} />)}</div>}
+        {popular.length > 0 && <div className="release-sub-label">Most popular</div>}
+        {popular.length > 0 && <div className="release-grid">{popular.map((track) => <ReleaseCard release={{ title: track.title, artist: artistName, date: 'Single · 2026', cover: track.embed, status: 'out' }} key={track.trackId} />)}</div>}
+        {newTracks.length > 0 && <div className="release-sub-label">More tracks</div>}
+        {newTracks.length > 0 && <div className="release-grid">{newTracks.map((track) => <ReleaseCard release={{ title: track.title, artist: artistName, date: 'Single · 2026', cover: track.embed, status: 'out' }} key={track.trackId} />)}</div>}
+      </section>;
+    })}
+    <section className="section-pad release-artist-section" style={{ paddingTop: 0 }}>
+      <div className="release-artist-head"><div className="release-artist-photo"><img src={artists.find((a) => a.name === '-+ApolloX+-')?.image} alt="-+ApolloX+- portrait" /></div><div><div className="eyebrow">-+ApolloX+-</div><a className="cta silver" href={artists.find((a) => a.name === '-+ApolloX+-')?.spotify} target="_blank" rel="noreferrer">Open on Spotify <ArrowRight size={14} /></a></div></div>
+      <div className="release-sub-label">Artist profile</div>
+      <div className="embed-grid"><div className="embed-box apollo-embed"><iframe title="-+ApolloX+- Spotify artist embed" src={`https://open.spotify.com/embed/artist/${artists.find((a) => a.name === '-+ApolloX+-')?.spotify.split('/').pop()}`} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" /></div></div>
+    </section>
   </>;
 }
 
 const videoThumbs = ['https://images.pexels.com/photos/12092991/pexels-photo-12092991.jpeg?auto=compress&cs=tinysrgb&w=1000', 'https://images.pexels.com/photos/22857353/pexels-photo-22857353.jpeg?auto=compress&cs=tinysrgb&w=1000', 'https://images.pexels.com/photos/34406254/pexels-photo-34406254.jpeg?auto=compress&cs=tinysrgb&w=1000'];
 function ListenPage() {
   const [video, setVideo] = useState<string | null>(null);
-  const featuredArtists = ['TADYN', 'THE KID JETT', '-+ApolloX+-', 'youngscide'];
-  const artistTracks: Record<string, SpotifyTrack[]> = {};
-  featuredArtists.forEach((name) => { artistTracks[name] = spotifyTracks.filter((t) => t.artist === name); });
+  const featuredArtists = ['TADYN', 'THE KID JETT', 'youngscide', '-+ApolloX+-'];
   return <><PageIntro eyebrow="The sound · On repeat" title="Listen"><p>Stream the real music from the roster. Full tracks, right here on the page.</p></PageIntro>
     <section className="section-pad"><div className="section-label"><h2>Featured tracks</h2><span>Play now</span></div><div className="listen-artist-grid">{featuredArtists.map((name) => {
       const artist = artists.find((a) => a.name === name);
-      const tracks = artistTracks[name];
+      const tracks = spotifyTracks.filter((t) => t.artist === name);
       if (!artist) return null;
       return <div className="listen-artist-block" key={name}>
         <div className="listen-artist-head"><div className="listen-artist-photo"><img src={artist.image} alt={`${name} portrait`} /></div><div><div className="eyebrow">{name}</div><a className="cta silver" href={artist.spotify} target="_blank" rel="noreferrer">Open profile <ArrowRight size={14} /></a></div></div>
