@@ -33,7 +33,7 @@ const spotifyLinks = [
   'https://open.spotify.com/artist/1p98iUARI2UdtAhk63eEQV',
   'https://open.spotify.com/artist/3MAVWo7qFIckg68Gj4tBek',
   'https://open.spotify.com/artist/6GPLARcKHyTh0i3i67wPan',
-  '#',
+  'https://open.spotify.com/artist/4dTlrERcZBZE8egV4YugpO',
   'https://open.spotify.com/artist/1p98iUARI2UdtAhk63eEQV',
   'https://open.spotify.com/artist/0QnRYGkGwj86hQApcn0H0z',
   'https://open.spotify.com/artist/3C4X59QVqOjiZwT5e2hN5F',
