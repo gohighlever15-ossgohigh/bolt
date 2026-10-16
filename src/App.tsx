@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
-import { ArrowDownRight, ArrowRight, Bot, Disc3, Facebook, Instagram, Menu, MessageCircle, Music2, Play, Send, X, Youtube } from 'lucide-react';
+import { useEffect, useMemo, useState, type FormEvent, type MouseEvent, type ReactNode } from 'react';
+import { ArrowDown, ArrowDownRight, ArrowLeft, ArrowRight, Bot, Disc3, Facebook, Instagram, Menu, MessageCircle, Music2, Play, Send, X, Youtube } from 'lucide-react';
 import { applicationUrl, artists, releases, type Artist, type Release } from '@/data';
 
 const navItems = [
@@ -7,9 +7,15 @@ const navItems = [
 ];
 
 function navigate(path: string): void {
+  const [pathname, hash] = path.split('#');
   window.history.pushState({}, '', path);
   window.dispatchEvent(new CustomEvent('navigate'));
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (hash) {
+    window.setTimeout(() => document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 40);
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (pathname !== window.location.pathname) window.history.replaceState({}, '', path);
 }
 
 function LinkButton({ href, children, silver = false, external = false }: { href: string; children: ReactNode; silver?: boolean; external?: boolean }) {
@@ -60,21 +66,33 @@ function ReleaseCard({ release }: { release: Release }) {
 }
 
 function Home() {
-  const featuredArtist = artists[0];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const heroArtists = artists.slice(0, 3);
+  const featuredArtist = heroArtists[activeIndex];
+  const moveHero = (direction: number): void => setActiveIndex((current) => (current + direction + heroArtists.length) % heroArtists.length);
+  const scrollToReleases = (): void => document.getElementById('latest-releases')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   return <>
     <section className="hero">
-      <div className="hero-slide current"><img src={featuredArtist.image} alt={`${featuredArtist.name} portrait`} /><div className="hero-shade" /></div>
+      {heroArtists.map((artist, index) => <div className={`hero-slide ${index === activeIndex ? 'current' : ''}`} key={artist.id}><img src={artist.image} alt={`${artist.name} portrait`} /><div className="hero-shade" /></div>)}
+      <button className="hero-nav hero-prev" aria-label="Previous featured artist" onClick={() => moveHero(-1)}><ArrowLeft size={20} /></button>
+      <button className="hero-nav hero-next" aria-label="Next featured artist" onClick={() => moveHero(1)}><ArrowRight size={20} /></button>
       <div className="hero-content reveal"><h1 className="display">{featuredArtist.name}</h1><div className="hero-actions"><LinkButton href={featuredArtist.spotify} external silver>Listen</LinkButton><LinkButton href={`/artists#${featuredArtist.id}`}>View artist</LinkButton></div></div>
+      <div className="hero-dots" aria-label="Featured artists">{heroArtists.map((artist, index) => <button className={`hero-dot ${index === activeIndex ? 'active' : ''}`} aria-label={`Show ${artist.name}`} aria-pressed={index === activeIndex} key={artist.id} onClick={() => setActiveIndex(index)} />)}</div>
     </section>
-    <div className="kicker-row"><span>Winter Music Group · Est. 2026 · Pop first. Every genre welcome.</span><span>Scroll to explore <ArrowDownRight size={14} /></span></div>
-    <section className="section-pad"><div className="section-label"><h2>Latest releases</h2><span>01 — 03</span></div><div className="release-strip">{releases.slice(0, 3).map((release) => <ReleaseCard key={release.title} release={release} />)}</div></section>
-    <section className="merch-teaser"><img src="https://images.pexels.com/photos/15693985/pexels-photo-15693985.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Two people wearing Winter Music Group hoodies" /><img className="merch-logo merch-logo-teaser" src="/images/WINTER copy.jpg" alt="Winter Music Group logo on the first collection" /><img className="merch-logo merch-logo-teaser-2" src="/images/WINTER copy.jpg" alt="Winter Music Group logo on the first collection" /><div className="merch-copy"><div className="eyebrow">Winter essentials · 001</div><h2 className="display">Merch. Soon.</h2><p className="muted">The first Winter Music Group collection is on its way.</p><button className="cta" onClick={() => window.alert('We will let you know when the collection arrives.')}>Notify me</button></div></section>
+    <button className="kicker-row kicker-button" onClick={scrollToReleases}><span>Winter Music Group · Est. 2026 · Pop first. Every genre welcome.</span><span>Scroll to explore <ArrowDown size={14} /></span></button>
+    <section className="section-pad" id="latest-releases"><div className="section-label"><h2>Latest releases</h2><span>01 — 03</span></div><div className="release-strip">{releases.slice(0, 3).map((release) => <ReleaseCard key={release.title} release={release} />)}</div></section>
+    <section className="merch-teaser"><img src="https://images.pexels.com/photos/5840463/pexels-photo-5840463.jpeg?auto=compress&cs=tinysrgb&w=1800" alt="Two people wearing hoodies" /><img className="merch-print merch-print-teaser" src="/images/WINTER copy.jpg" alt="Winter Music Group logo printed on the hoodie" /><img className="merch-print merch-print-teaser-2" src="/images/WINTER copy.jpg" alt="Winter Music Group logo printed on the hoodie" /><div className="merch-copy"><div className="eyebrow">Winter essentials · 001</div><h2 className="display">Merch. Soon.</h2><p className="muted">The first Winter Music Group collection is on its way.</p><button className="cta" onClick={() => window.alert('We will let you know when the collection arrives.')}>Notify me</button></div></section>
     <section className="section-pad"><div className="apply-band"><div><div className="eyebrow">Open call · 2026</div><h2 className="display">Join the roster.</h2></div><div><p>We are looking for artists with a world of their own. Any genre welcome.</p><LinkButton href="/apply" silver>Apply now</LinkButton></div></div></section>
   </>;
 }
 
 function ArtistsPage() {
-  return <><PageIntro eyebrow={`The roster · ${String(artists.length).padStart(2, '0')} artists`} title="Artists"><p>A home for singular voices. Pop first, every genre welcome.</p></PageIntro><div className="index-bar"><div className="index-inner">{artists.map((artist) => <a href={`#${artist.id}`} key={artist.id}>{artist.name}</a>)}</div></div>{artists.map((artist, index) => <ArtistSection artist={artist} reverse={index % 2 === 1} key={artist.id} />)}</>;
+  const jumpToArtist = (event: MouseEvent<HTMLAnchorElement>, id: string): void => {
+    event.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.history.replaceState({}, '', `/artists#${id}`);
+  };
+  return <><PageIntro eyebrow={`The roster · ${String(artists.length).padStart(2, '0')} artists`} title="Artists"><p>A home for singular voices. Pop first, every genre welcome.</p></PageIntro><div className="index-bar"><div className="index-inner">{artists.map((artist) => <a href={`#${artist.id}`} onClick={(event) => jumpToArtist(event, artist.id)} key={artist.id}>{artist.name}</a>)}</div></div>{artists.map((artist, index) => <ArtistSection artist={artist} reverse={index % 2 === 1} key={artist.id} />)}</>;
 }
 
 function ArtistSection({ artist, reverse }: { artist: Artist; reverse: boolean }) {
@@ -94,7 +112,7 @@ function ListenPage() {
 }
 
 function MerchPage() {
-  return <section className="merch-page"><div className="merch-image"><img src="https://images.pexels.com/photos/15693985/pexels-photo-15693985.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="Two people wearing Winter Music Group hoodies" /><img className="merch-logo merch-logo-page" src="/images/WINTER copy.jpg" alt="Winter Music Group logo on the hoodie" /><img className="merch-logo merch-logo-page-2" src="/images/WINTER copy.jpg" alt="Winter Music Group logo on the hoodie" /></div><div className="merch-page-copy"><div className="eyebrow">Collection 001 · Coming soon</div><h1 className="display">Coming soon.</h1><p>Quiet pieces for the people who keep the music close.</p><form className="notify" onSubmit={(event) => { event.preventDefault(); window.alert('You are on the list.'); }}><input aria-label="Email address" type="email" placeholder="Email address" required /><button type="submit">Notify me <ArrowRight size={14} /></button></form></div></section>;
+  return <section className="merch-page"><div className="merch-image"><img src="https://images.pexels.com/photos/5840463/pexels-photo-5840463.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="Two people wearing hoodies" /><img className="merch-print merch-print-page" src="/images/WINTER copy.jpg" alt="Winter Music Group logo printed on the hoodie" /><img className="merch-print merch-print-page-2" src="/images/WINTER copy.jpg" alt="Winter Music Group logo printed on the hoodie" /></div><div className="merch-page-copy"><div className="eyebrow">Collection 001 · Coming soon</div><h1 className="display">Coming soon.</h1><p>Quiet pieces for the people who keep the music close.</p><form className="notify" onSubmit={(event) => { event.preventDefault(); window.alert('You are on the list.'); }}><input aria-label="Email address" type="email" placeholder="Email address" required /><button type="submit">Notify me <ArrowRight size={14} /></button></form></div></section>;
 }
 
 function ApplyPage() {

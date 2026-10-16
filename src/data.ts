@@ -19,13 +19,13 @@ const portraits = [
   '/images/artists/780840719_18099785579014023_6782924280227178316_n.jpg',
   '/images/artists/Oh_sh_it’s_getting_heated🔥🔥🔥🔥.jpg',
   '/images/artists/IMG_2715.JPG',
-  '/images/artists/a861d1a4d9.webp',
   '/images/artists/1000x1000.jpg',
+  '/images/artists/a861d1a4d9.webp',
   '/images/artists/AND_THAT_A_STAR_WAS_BORN🤩🤩.jpg',
   '/images/artists/I’ll_call_you_back_in_a_second✍️✍️_(1).jpg',
   '/images/artists/Yes_Sir,_Here_Comes_another_one!!!🤩⭐️.jpg',
-  '/images/artists/780840719_18099785579014023_6782924280227178316_n.jpg',
-  '/images/artists/Oh_sh_it’s_getting_heated🔥🔥🔥🔥.jpg',
+  '/images/artists/This_is_all_he’d_send_us🥲_(someone_is_grouchy).jpg',
+  '/images/artists/1000x1000.jpg',
 ];
 
 const spotifyLinks = [
