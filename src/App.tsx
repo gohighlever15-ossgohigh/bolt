@@ -91,7 +91,7 @@ function ArtistsPage() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     window.history.replaceState({}, '', `/artists#${id}`);
   };
-  return <><PageIntro eyebrow={`The roster · ${String(artists.length).padStart(2, '0')} artists`} title="Artists"><p>A home for singular voices. Pop first, every genre welcome.</p></PageIntro><div className="index-bar"><div className="index-inner">{artists.map((artist) => <a href={`#${artist.id}`} onClick={(event) => jumpToArtist(event, artist.id)} key={artist.id}>{artist.name}</a>)}</div></div>{artists.map((artist, index) => <ArtistSection artist={artist} reverse={index % 2 === 1} key={artist.id} />)}</>;
+  return <><PageIntro eyebrow={`The roster · ${String(artists.length).padStart(2, '0')} artists`} title="Artists"><p>A home for singular voices. Pop first, every genre welcome.</p></PageIntro><div className="index-bar"><div className="index-inner">{artists.map((artist) => <a href={`#${artist.id}`} onClick={(event) => jumpToArtist(event, artist.id)} key={artist.id}>{artist.name}</a>)}</div></div><div className="artist-gallery">{artists.map((artist, index) => <ArtistSection artist={artist} reverse={index % 2 === 1} key={artist.id} />)}</div></>;
 }
 
 function ArtistSection({ artist, reverse }: { artist: Artist; reverse: boolean }) {

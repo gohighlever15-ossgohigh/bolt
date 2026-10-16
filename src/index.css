@@ -101,6 +101,7 @@ a { color: inherit; text-decoration: none; }
 .index-inner { max-width: 1240px; margin: auto; padding: 18px 24px; display: flex; justify-content: center; gap: 12px; white-space: nowrap; flex-wrap: wrap; }
 .index-inner a { font-size: 11px; color: #a1a1a1; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 8px 12px; transition: color .2s, border-color .2s, background .2s; }
 .index-inner a:hover { color: #0a0a0a; border-color: #c8d4dc; background: #c8d4dc; }
+.artist-gallery { display: contents; }
 .artist-section { display: grid; grid-template-columns: 1.1fr .9fr; min-height: 720px; border-bottom: 1px solid rgba(255,255,255,.12); }
 .artist-section.reverse { grid-template-columns: .9fr 1.1fr; }
 .artist-section.reverse .artist-image { order: 2; }
@@ -225,9 +226,12 @@ a { color: inherit; text-decoration: none; }
   .release-strip, .release-grid { grid-template-columns: repeat(2, 1fr); }
   .release-strip .release-card:last-child { display: none; }
   .apply-band, .apply-intro { align-items: flex-start; flex-direction: column; }
-  .artist-section, .artist-section.reverse { display: flex; flex-direction: column; }
+  .artist-gallery { display: flex; gap: 16px; overflow-x: auto; padding: 0 20px 28px; scroll-behavior: smooth; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: rgba(200,212,220,.55) transparent; }
+  .artist-gallery::-webkit-scrollbar { height: 4px; }
+  .artist-gallery::-webkit-scrollbar-thumb { background: rgba(200,212,220,.55); border-radius: 999px; }
+  .artist-section, .artist-section.reverse { flex: 0 0 min(88vw, 520px); display: flex; flex-direction: column; min-height: calc(100svh - 160px); border: 1px solid rgba(255,255,255,.12); scroll-snap-align: start; }
   .artist-section.reverse .artist-image { order: 0; }
-  .artist-image { min-height: 500px; height: 70vw; }
+  .artist-image { min-height: 0; height: 58vw; max-height: 430px; }
   .artist-image img { object-position: center top; }
   .hero-slide img { object-position: center 25%; }
   .artist-copy { min-height: 430px; padding: 40px 24px; }
@@ -244,7 +248,7 @@ a { color: inherit; text-decoration: none; }
   .chatbot { right: 16px; bottom: 16px; }
   .chat-launcher { min-height: 46px; padding: 0 16px; }
   .hero h1 { font-size: clamp(2.5rem, 12vw, 4rem); }
-  .artist-image { min-height: 390px; }
+  .artist-image { min-height: 0; height: 68vw; }
   .logo-frame { width: 52px; height: 52px; }
   .nav-logo { width: 136px; height: 136px; }
   .wordmark { gap: 7px; font-size: 11px; }
