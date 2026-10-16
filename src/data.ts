@@ -17,10 +17,10 @@ export type Release = {
 
 const portraits = [
   '/images/artists/780840719_18099785579014023_6782924280227178316_n.jpg',
-  '/images/artists/AND_THAT_A_STAR_WAS_BORN🤩🤩.jpg',
   '/images/artists/IMG_2715.JPG',
   '/images/artists/1000x1000.jpg',
   '/images/76025a6a67.webp',
+  '/images/artists/AND_THAT_A_STAR_WAS_BORN🤩🤩.jpg',
   '/images/artists/Oh_sh_it’s_getting_heated🔥🔥🔥🔥.jpg',
   '/images/artists/I’ll_call_you_back_in_a_second✍️✍️_(1).jpg',
   '/images/artists/Yes_Sir,_Here_Comes_another_one!!!🤩⭐️.jpg',
@@ -30,10 +30,10 @@ const portraits = [
 
 const spotifyLinks = [
   'https://open.spotify.com/artist/3sNMoJo8vPKlK8xFxXLCUo',
-  'https://open.spotify.com/artist/6GPLARcKHyTh0i3i67wPan',
   'https://open.spotify.com/artist/3MAVWo7qFIckg68Gj4tBek',
-  'https://open.spotify.com/artist/6GPLARcHyTh0i3i67wPan',
+  'https://open.spotify.com/artist/6GPLARcKHyTh0i3i67wPan',
   'https://open.spotify.com/artist/4dTlrERcZBZE8egV4YugpO',
+  'https://open.spotify.com/artist/6GPLARcKHyTh0i3i67wPan',
   'https://open.spotify.com/artist/6gjyn6VpLNULqE1ouH48bg',
   'https://open.spotify.com/artist/0QnRYGkGwj86hQApcn0H0z',
   'https://open.spotify.com/artist/3C4X59QVqOjiZwT5e2hN5F',
@@ -41,7 +41,7 @@ const spotifyLinks = [
   'https://open.spotify.com/artist/1RILf7ZSkScz2HW1sRimCL',
 ];
 
-const names = ['TADYN', 'youngscide', 'THE KID JETT', 'em34son', '-+ApolloX+-', 'YHB_Kee', 'gaverick_booms', 'GVIYEM', 'ZXM', 'WITHER'];
+const names = ['TADYN', 'THE KID JETT', 'em34son', '-+ApolloX+-', 'youngscide', 'YHB_Kee', 'gaverick_booms', 'GVIYEM', 'ZXM', 'WITHER'];
 
 export const artists: Artist[] = names.map((name, index) => ({
   id: name.toLowerCase().replace(/ /g, '-'),
