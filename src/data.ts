@@ -25,7 +25,7 @@ const portraits = [
   '/images/artists/I’ll_call_you_back_in_a_second✍️✍️_(1).jpg',
   '/images/artists/Yes_Sir,_Here_Comes_another_one!!!🤩⭐️.jpg',
   '/images/artists/This_is_all_he’d_send_us🥲_(someone_is_grouchy)_copy.jpg',
-  '/images/artists/1000x1000.jpg',
+  '/images/artists/Stuck_in_the_high_loop_(1).jpg',
 ];
 
 const spotifyLinks = [

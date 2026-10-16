@@ -69,10 +69,6 @@ function Home() {
   const heroArtists = artists;
   const featuredArtist = heroArtists[activeIndex];
   const moveHero = (direction: number): void => setActiveIndex((current) => (current + direction + heroArtists.length) % heroArtists.length);
-  useEffect(() => {
-    const timer = window.setInterval(() => setActiveIndex((current) => (current + 1) % artists.length), 6500);
-    return () => window.clearInterval(timer);
-  }, []);
   const scrollToReleases = (): void => document.getElementById('latest-releases')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   return <>
     <section className="hero">
